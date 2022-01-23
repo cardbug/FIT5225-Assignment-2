@@ -145,7 +145,7 @@
 <body>
 <div class="layui-container">
     <div class="title">
-        图床系统
+        Modern Image Storage System
     </div>
     <div class="admin-login-background">
         <div class="avatar_box">
@@ -169,7 +169,7 @@
                 </div>
                 <div class="layui-form-item">
                     <button class="layui-btn layui-btn layui-btn-normal layui-btn-fluid" lay-submit=""
-                            lay-filter="login">登 入
+                            lay-filter="login">login
                     </button>
                 </div>
             </form>
@@ -191,8 +191,8 @@
             param = data.field;
             $.post('{% url 'picture:login' %}', param, function (res) {
                 if (res["status"]) {
-                    layer.confirm("登录成功", {
-                        btn: ['确定'] //按钮
+                    layer.confirm("Login successful", {
+                        btn: ['OK'] //按钮
                     }, function () {
                         parent.window.location.href = "{% url 'picture:index' %}"
                     })
