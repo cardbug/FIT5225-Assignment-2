@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图片上传</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+</head>
+<body>
+<div class="layui-card">
+    <div class="layui-card-header">图片上传</div>
+    <div class="layui-card-body">
+        <div class="layui-upload">
+            <div class="layui-upload-drag" id="uploadbtn" style="width: 94%">
+                <i class="layui-icon layui-icon-upload"></i>
+                <p>点击文件进行上传,也可拖拽上传</p>
+            </div>
+            <div class="layui-upload-list">
+                <img class="layui-upload-img" id="demo1">
+                <div id="tag" style="font-size: 18px;margin-top: 10px"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="/static/js/jquery.min.js" charset="utf-8"></script>
+<script src="/static/layui/layui.js" charset="utf-8"></script>
+<script>
+    layui.use('upload', function () {
+        var upload = layui.upload;
+
+        var uploadInst = upload.render({
+            elem: '#uploadbtn'
+            , url: "{% url 'picture:upload_image' %}"
+            , before: function (obj) {
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    $('#demo1').attr('src', result);
+                });
+
+            }
+            , done: function (res) {
+                //这里回调函数的参数res就是接口返回的数据
+                //alert(JSON.stringify(res.data.src))
+                //如果上传失败
+                if (res.code > 0) {
+                    return layer.msg('上传失败');
+                }
+                layer.msg('上传成功')
+                $("#tag").text("标签："+res["data"]["tags"])
+
+
+            }
+            , error: function () {
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function () {
+                    uploadInst.upload();
+                });
+            }
+        });
+    })
+</script>
+</body>
+</html>
