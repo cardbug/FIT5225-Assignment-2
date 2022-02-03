@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/static/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <link rel="stylesheet" href="/static/css/plugins/sweetalert/sweetalert.css">
+    <link rel="stylesheet" href="/static/css/baguetteBox.min.css">
+    <link rel="stylesheet" href="/static/css/gallery-clean.css">
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+
+        .jq22-demo {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .jq22-demo a {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .tz-gallery .thumbnail {
+            padding: 0;
+            margin-bottom: 30px;
+            border: 1px solid #ccc;
+        }
+
+        .thumbnail a > img, .thumbnail > img {
+            margin-right: auto;
+            margin-left: auto;
+            height: 300px;
+            width: 100%;
+        }
+
+        #title {
+            font: bold 48pt "Trebuchet MS";
+            text-align: center;
+            color: #F95;
+            letter-spacing: -2px;
+        }
+
+        #title span {
+            font-weight: normal;
+            color: #BBB;
+        }
+
+        .tags {
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            border-radius: 10px;
+            box-shadow: 1px 1px 4px #CCC inset;
+            padding: 10px;
+            width: 100%;
+            background: #fafafa;
+            margin: auto;
+        }
+
+        #tag-typer {
+            outline: none;
+            border: none;
+            padding: 6px;
+            margin: 3px;
+            margin-right: -25px;
+            width: 100px;
+            background-color: transparent;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .tag {
+
+            display: inline-block;
+            background: #F95;
+            color: #FFF;
+            padding: 5px 7px;
+            margin: 1px -4px 2px 14px;
+            font: normal 16px sans-serif;
+            position: relative;
+            cursor: default;
+            box-shadow: 1px 1px 0 rgb(0 0 0 / 20%);
+            -webkit-transform-origin: 0% 50%;
+            -webkit-animation: swing 1s;
+            -o-animation: swing 1s;
+            animation: swing 1s;
+            /* float: left; */
+            font-size: 15px;
+
+        }
+
+        .tag:before {
+            content: "";
+            position: absolute;
+            width: 0;
+            background: inherit;
+            height: 10px;
+            border: 10px solid #fafafa;
+            border-right-color: transparent;
+            -webkit-border-radius: 10px 0 0 10px;
+            -moz-border-radius: 10px 0 0 10px;
+            border-radius: 10px 0 0 10px;
+            left: -20px;
+            top: 0;
+        }
+
+        .tag:after {
+            content: "";
+            width: 6px;
+            height: 6px;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+            background: #FFF;
+            position: absolute;
+            left: -3px;
+            top: 12px;
+            box-shadow: inset 1px 1px 0 #CCC;
+        }
+
+        .tag .close {
+            position: absolute;
+            background: inherit;
+            left: -4px;
+            z-index: 3;
+            visibility: hidden;
+        }
+
+        .tag:hover .close {
+            visibility: visible;
+
+        }
+
+        .close:hover {
+            color: rgba(0, 0, 0, .5);
+        }
+
+
+        .colors {
+            list-style: none;
+        }
+
+        .colors li {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+        }
+
+        /* Chrome, Safari, Opera */
+        @-webkit-keyframes swing {
+            0% {
+                -webkit-transform: rotate(100deg)
+            }
+            25% {
+                -webkit-transform: rotate(-25deg)
+            }
+            50% {
+                -webkit-transform: rotate(15deg)
+            }
+            100% {
+                -webkit-transform: rotate(0deg)
+            }
+        }
+
+
+        @keyframes swing {
+            0% {
+                -webkit-transform: rotate(-200)
+            }
+            25% {
+                -webkit-transform: rotate(-70)
+            }
+            50% {
+                -webkit-transform: rotate(-185)
+            }
+            100% {
+                -webkit-transform: rotate(-180)
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="htmleaf-container">
+    <div class=" gallery-container">
+        <div class="tz-gallery">
+            <div class="row" style="margin-bottom: 20px">
+                <div class="col-md-12">
+                    <form role="search" class="navbar-form-custom form-inline" method="get"
+                          action="{% url 'picture:image_list' %}">
+                        <div class="form-group">
+                            <input type="text" placeholder="search" class="form-control" name="q"
+                                   id="top-search" style="width:350px" value="{{ q }}">
+                            <input type="submit" class="btn btn-primary" value="Search">
+                        </div>
+                        <a href="/picture/upload_image/" class="btn btn-primary" style="float: right;margin-right: 20px;">upload image</a>
+                    </form>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">Search by image</div>
+                <div class="layui-card-body">
+                    <div class="layui-upload">
+                        <div class="layui-upload-drag" id="uploadbtn" style="width: 94%">
+                            <i class="layui-icon layui-icon-upload"></i>
+                            <p>Drop Image Or click Upload</p>
+                        </div>
+                        <div class="layui-upload-list">
+                            <img class="layui-upload-img" id="demo1">
+                            <div id="tag" style="font-size: 18px;margin-top: 10px"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                {% for item in img_list %}
+                    <div class="col-sm-6 col-md-3" id="{{ item }}" style="height: 600px;">
+                        <div class="thumbnail">
+                            <a class="lightbox" href="https://fit5225ass.s3.amazonaws.com/images/{{ item.name }}">
+                                <img src="https://fit5225ass.s3.amazonaws.com/images/{{ item.name }}" alt="Park">
+                            </a>
+                            <div class="caption">
+                                <ul class="list-group">
+                                    <li class="list-group-item "><label for="tag-typer">
+                                        <div class="tags">
+                                            {% for tag in item.tags %}
+                                                <span class="tag" file="{{ item.name }}"><span
+                                                        class="close">×</span>{{ tag }}</span>
+                                            {% endfor %}
+                                        </div>
+
+                                    <li class="list-group-item"> name：{{ item.name }}</li>
+
+                                </ul>
+                                <button type="button" class="btn btn-danger delete" file="{{ item.name }}">delete</button>
+
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<script src="/static/js/jquery.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="/static/js/baguetteBox.min.js"></script>
+<script src="/static/js/plugins/sweetalert/sweetalert.min.js"></script>
+
+
+<script src="/static/layui/layui.js" charset="utf-8"></script>
+<script src="/static/script.js"></script>
+<script>
+    layui.use('upload', function () {
+        var upload = layui.upload;
+
+        var uploadInst = upload.render({
+            elem: '#uploadbtn'
+            , url: "{% url 'picture:upload_image' %}"
+            // , before: function (obj) {
+            //     //预读本地文件示例，不支持ie8
+            //     obj.preview(function (index, file, result) {
+            //         $('#demo1').attr('src', result);
+            //     });
+
+            // }
+            , done: function (res) {
+                //这里回调函数的参数res就是接口返回的数据
+                //alert(JSON.stringify(res.data.src))
+                //如果上传失败
+                window.location.href = '/picture/image_list/?name=' + res["data"]["name"] 
+                if (res.code > 0) {
+                    return layer.msg('upload faild');
+                }
+                layer.msg('上传成功')
+
+
+            }
+            , error: function () {
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function () {
+                    uploadInst.upload();
+                });
+            }
+        });
+    })
+</script>
+<script>
+    $(function () {
+        $('.delete').click(function () {
+            var imagename = $(this).attr("file");
+            var that = this
+            swal({
+                title: "Do you want to delete it ",
+                text: "",
+                type: "warning",
+                showCancelButton: true,
+                cancelButtonText: 'Cancel',
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Delete",
+                closeOnConfirm: false
+            }, function () {
+                $.post("{% url 'picture:delete_img' %}", {"imagename": imagename}, function (data) {
+                    if (data["code"] = 200) {
+                        swal(data["msg"], "Deleted", "success");
+                        $(that).parent().parent().parent().remove()
+                    } else {
+                        swal("Done", data["msg"], "error");
+                    }
+                })
+            });
+
+
+        });
+        
+    })
+</script>
+<script type="text/javascript">
+    baguetteBox.run('.tz-gallery');
+</script>
+</body>
+</html>
