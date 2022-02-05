@@ -10,7 +10,7 @@ from picture.models import FileInfo
 from aws_hepler import upload_aws_image,search_image_by_tag,delete_img_by_name,search_image_by_image,delete_tags_by_tag
 #from pure_pagination import Paginator, PageNotAnInteger
 from django.db.models import Q
-
+import base64
 
 def get_md5():
     time_now = timezone.now()
@@ -63,7 +63,7 @@ def upload_image(request):
         if response.status_code == 200:
             res = {
                 "code": 0,
-                "msg": '上传成功',
+                "msg": 'Uploaded',
                 "data": {
                     "src": "/" + os.path.join("static", "uploads", timestrap, NewFileName).replace("\\", "/"),
                     "name": image.name,
@@ -73,7 +73,7 @@ def upload_image(request):
         else:
             res = {
                 "code": 400,
-                "msg": '上传服务器失败',
+                "msg": 'Failed',
             }
 
         return JsonResponse(res)
@@ -91,7 +91,7 @@ def edit_tag(request):
         fileinfo.save()
     except:
         res["code"] = 500
-        res["msg"] = "操作失败"
+        res["msg"] = "Failed"
     return JsonResponse(res)
 import json
 
@@ -150,12 +150,12 @@ def delete_img(request):
             imagename = request.POST.get("imagename")
             result=delete_img_by_name(imagename)
             if "errorMessage" in result:
-                res["msg"] = "删除失败"
+                res["msg"] = "Delete failed"
                 res["code"] = 500
                 return JsonResponse(res)
             return JsonResponse(res)
         except:
-            res["msg"] = "删除失败"
+            res["msg"] = "Delete failed"
             res["code"] = 500
             return JsonResponse(res)
 
